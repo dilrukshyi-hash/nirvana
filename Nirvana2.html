@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nirvana Home Restaurant | Vicenza, Italy</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.4);
+            --bg: #0a0a0a;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at 50% 0%, #1f1d18 0%, #0a0a0a 70%);
+            color: #e0e0e0;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Fixed Navigation - Glassmorphism 3D */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 25px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; 
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: var(--transition);
+        }
+
+        .logo-container { display: flex; align-items: center; gap: 15px; }
+        .logo { 
+            font-family: 'Cinzel', serif; font-size: 1.8rem; color: var(--gold); 
+            letter-spacing: 3px; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        .logo-sinhala { font-size: 0.9rem; color: #fff; font-weight: 300; opacity: 0.8; }
+        
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { 
+            color: white; text-decoration: none; font-size: 0.8rem; 
+            letter-spacing: 2px; text-transform: uppercase; transition: 0.3s;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; width: 0; height: 2px; 
+            bottom: -5px; left: 0; background-color: var(--gold); 
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* General Section Styling */
+        section { min-height: 100vh; width: 100%; padding: 120px 10%; position: relative; }
+
+        /* General Elements */
+        .reveal { opacity: 0; transform: translateY(50px); }
+        
+        /* 3D Button Style */
+        .btn {
+            padding: 15px 35px; 
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            border: 1px solid var(--gold); 
+            color: var(--gold);
+            text-decoration: none; text-transform: uppercase; letter-spacing: 2px;
+            transition: var(--transition); display: inline-block; margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.8), -5px -5px 15px rgba(255,255,255,0.02);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(212,175,55,0.2), transparent);
+            transform: skewX(-25deg); transition: 0.5s;
+        }
+        .btn:hover::before { left: 150%; }
+        .btn:hover { 
+            background: var(--gold); color: black; 
+            box-shadow: 0 10px 25px var(--gold-glow), inset 0 -3px 5px rgba(0,0,0,0.2); 
+            transform: translateY(-3px);
+            font-weight: 600;
+        }
+        .btn:active { transform: translateY(1px); box-shadow: 0 5px 10px var(--gold-glow); }
+
+        /* Typography Enhancements */
+        h2 { text-shadow: 2px 5px 10px rgba(0,0,0,0.5); }
+
+        /* 1. HOME Section */
+        #home {
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; position: relative;
+        }
+        .hero-title { 
+            font-family: 'Cinzel', serif; font-size: 6rem; line-height: 1; margin: 20px 0; color: white;
+            text-shadow: 0 15px 30px rgba(0,0,0,0.9), 0 0 40px rgba(212,175,55,0.2);
+        }
+        .hero-sinhala { font-size: 1.2rem; color: #ccc; margin-top: -10px; margin-bottom: 30px; letter-spacing: 1px; }
+
+        /* 2. ABOUT Section */
+        #about { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        .about-text { max-width: 500px; }
+        .about-text p { line-height: 1.8; color: #b3b3b3; font-size: 1.05rem; }
+        
+        /* 3D About Image Box */
+        .about-img > div {
+            border-radius: 15px;
+            box-shadow: 20px 20px 50px rgba(0,0,0,0.8), -5px -5px 20px rgba(255,255,255,0.03), inset 0 0 20px rgba(212,175,55,0.1);
+            background: linear-gradient(135deg, #151515, #080808) !important;
+            transition: var(--transition);
+        }
+        .about-img > div:hover { transform: translateY(-10px) rotateX(5deg) rotateY(-5deg); box-shadow: 25px 25px 60px rgba(0,0,0,0.9), 0 0 30px var(--gold-glow); }
+
+        /* 3. MENU Section */
+        #menu .menu-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px; margin-top: 50px;
+        }
+        .menu-item {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 40px; 
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            position: relative; transition: var(--transition);
+            perspective: 1000px;
+            overflow: hidden;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.6), inset 2px 2px 5px rgba(255,255,255,0.02);
+        }
+        .menu-item::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 15px; padding: 2px;
+            background: linear-gradient(135deg, rgba(212,175,55,0.5), transparent, rgba(212,175,55,0.1));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out; mask-composite: exclude;
+            opacity: 0; transition: var(--transition);
+        }
+        .menu-item:hover { 
+            transform: translateY(-15px) translateZ(20px); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.9), 0 0 20px var(--gold-glow);
+            background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+        }
+        .menu-item:hover::before { opacity: 1; }
+        .menu-item h3 { color: var(--gold); font-family: 'Cinzel', serif; margin-bottom: 15px; font-size: 1.4rem; }
+        .menu-item p { color: #aaa; line-height: 1.6; font-size: 0.95rem; }
+        .menu-item .price { 
+            position: absolute; top: 30px; right: 30px; color: var(--gold); 
+            font-weight: bold; font-size: 1.2rem;
+            background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px;
+            box-shadow: inset 0 0 5px rgba(212,175,55,0.3);
+        }
+
+        /* 4. GALLERY Section (Enhanced 3D Zoom & Glare Effect) */
+        #gallery .gallery-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 50px;
+        }
+        .gallery-img {
+            aspect-ratio: 1/1; background: #000; 
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            overflow: hidden; position: relative; cursor: pointer;
+            perspective: 1500px; transform-style: preserve-3d;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+        }
+        .gallery-img img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s;
+            filter: grayscale(0.8) brightness(0.8);
+        }
+        .gallery-img:hover img {
+            transform: scale(1.15) translateZ(30px);
+            filter: grayscale(0) brightness(1.1);
+        }
+
+        /* 3D Glare Effect layer */
+        .glare-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.2) 25%, transparent 30%);
+            mix-blend-mode: overlay; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease; z-index: 2;
+        }
+        .gallery-img:hover .glare-layer { opacity: 1; }
+
+        /* Image Captions - 3D Pop */
+        .gallery-caption {
+            position: absolute; bottom: 20px; left: 20px; right: 20px;
+            background: rgba(10, 10, 10, 0.85); padding: 12px 15px;
+            backdrop-filter: blur(5px); border-left: 3px solid var(--gold);
+            font-size: 0.9rem; color: #fff; font-weight: 300;
+            opacity: 0; transition: var(--transition); 
+            transform: translateY(20px) translateZ(40px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            border-radius: 0 5px 5px 0;
+            z-index: 3;
+        }
+        .gallery-img:hover .gallery-caption { opacity: 1; transform: translateY(0) translateZ(40px); }
+
+        /* 5. CONTACT & BOOK PAGE */
+        #book { text-align: center; }
+        .contact-details { 
+            max-width: 600px; margin: 40px auto; color: #aaa; 
+            background: rgba(20, 20, 20, 0.4); padding: 40px;
+            border-radius: 15px; border: 1px solid var(--glass-border);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Gold Social Media Icons - 3D Hover */
+        .social-media { display: flex; justify-content: center; gap: 40px; margin-top: 50px; }
+        .social-media a {
+            color: var(--gold); font-size: 2rem;
+            text-decoration: none; transition: var(--transition);
+            display: flex; justify-content: center; align-items: center;
+            width: 60px; height: 60px; border-radius: 50%;
+            background: linear-gradient(145deg, #151515, #080808);
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.8), -2px -2px 10px rgba(255,255,255,0.02);
+        }
+        .social-media a:hover {
+            color: #000; background: var(--gold);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 20px var(--gold-glow), inset 0 -3px 5px rgba(0,0,0,0.2);
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-container">
+            <div style="width:30px;height:20px;background: linear-gradient(135deg, #d4af37, #aa8529); border-radius: 3px; box-shadow: 0 2px 10px rgba(212,175,55,0.4);"></div>
+            <div>
+                <div class="logo">NIRVANA</div>
+                <div class="logo-sinhala">විචෙන්සා හෝම් රෙස්ටුරන්ට්</div>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#menu">Menu</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#book">Book</a>
+        </div>
+    </nav>
+
+    <section id="home">
+        <p style="color: var(--gold); letter-spacing: 5px; opacity: 0; transform: translateY(30px); text-shadow: 0 0 10px rgba(212,175,55,0.3);" class="reveal-fade">VICENZA'S FINEST HOME DINING</p>
+        <h1 class="hero-title reveal-fade">NIRVANA</h1>
+        <p class="hero-sinhala reveal-fade">ශ්‍රී ලාංකීය රස, සෞඛ්‍යය සහ සම්ප්‍රදාය</p>
+        <a href="#menu" class="btn reveal-fade" style="opacity: 0; transform: translateY(30px);">Explore Our Feast</a>
+    </section>
+
+    <section id="about">
+        <div class="about-text">
+            <h2 class="reveal" style="font-family: 'Cinzel'; font-size: 3.5rem; color: var(--gold); margin-bottom: 20px;">Health & Connection</h2>
+            <p class="reveal">අපි පාවිච්චි කරන්නේ ගෙදර හදන කුළුබඩු. සෞඛ්‍යාරක්ෂිතව, නැවුම්ව පිළියෙල කරන නිසා රස වගේම ගුණත් උපරිමයි. Vicenza වල නිදහසේ, පවුලේ අය එක්ක shared authentic platters රස විඳින්න තියෙන හොඳම තැන.</p>
+        </div>
+        <div class="about-img reveal">
+            <div style="width: 100%; height: 400px; display:flex; justify-content:center; align-items:center; color: var(--gold);">[Leaf-Wrapped Tradition]</div>
+        </div>
+    </section>
+
+    <section id="menu">
+        <h2 style="font-family: 'Cinzel'; font-size: 3rem; text-align: center; color: var(--gold); margin-bottom: 50px;">අපේ විශේෂ කෑම වට්ටෝරු</h2>
+        <div class="menu-grid">
+            
+            <div class="menu-item reveal">
+                <span class="price">€15</span>
+                <h3>ලම්ප්රයිස් (Lumprais)</h3>
+                <p>කෙසෙල් කොළයේ එතූ, සැබෑ දේශීය රසය විදහා දක්වන සුවිශේෂී වෑංජන සහ සම්බෝල සමඟ පිළිගන්වන සම්ප්‍රදායික ලම්ප්රයිස් අත්දැකීමක්.</p>
+            </div>
+
+            <div class="menu-item reveal">
+                <span class="price">€18</span>
+                <h3>කජු සහ ඉස්සන් විශේෂ වෑංජනය</h3>
+                <p>නැවුම් ලොකු ඉස්සන් සහ පෝෂණීය කජු මිශ්‍ර කර, අපේම ගෙදර හැදූ කුළුබඩු යොදා පිළියෙල කළ ප්‍රණීත සහ ගුණදායක කරියක්.</p>
+            </div>
+
+            <div class="menu-item reveal">
+                <span class="price">€12</span>
+                <h3>කෙටි කෑම තැටිය (Short Eats Tray)</h3>
+                <p>පවුලේ අය සහ මිතුරන් සමඟ බෙදාගැනීමට සුදුසු, අතින් නිමවූ නැවුම් කට්ලට්, පැටිස් ඇතුළු රසවත් කෙටි කෑම පෙළක්.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="gallery">
+        <h2 style="font-family: 'Cinzel'; font-size: 3rem; text-align: center; color: var(--gold); margin-bottom: 10px;">නිරාමිස අත්දැකීම</h2>
+        <p style="text-align: center; color: #888; margin-bottom: 50px; font-size: 1.1rem;">අපේ රසවත් සංග්‍රහයන් කිහිපයක්</p>
+        
+        <div class="gallery-grid">
+            <div class="gallery-img reveal tilt-card">
+                <div class="glare-layer"></div>
+                <img src="472746717_563421003181553_3744072053082944544_n.jpg" alt="Authentic Sri Lankan Meal Concept">
+                <div class="gallery-caption">නැවුම් දේශීය රසය</div>
+            </div>
+
+            <div class="gallery-img reveal tilt-card">
+                <div class="glare-layer"></div>
+                <img src="472029208_560168396840147_6665323758186423007_n.jpg" alt="Sri Lankan Rice Concept">
+                <div class="gallery-caption">සමීපතයන් සමඟ බෙදාගන්න</div>
+            </div>
+
+            <div class="gallery-img reveal tilt-card">
+                <div class="glare-layer"></div>
+                <img src="471168385_550217407835246_7086756256579475422_n.jpg" alt="Sri Lankan Short Eats Concept">
+                <div class="gallery-caption">උණුසුම් සංග්‍රහය</div>
+            </div>
+
+         <div class="gallery-img reveal tilt-card">
+                <div class="glare-layer"></div>
+                <img src="471153824_550219667835020_6449278713413019517_n.jpg" alt="Sri Lankan Rice Concept">
+                <div class="gallery-caption">සමීපතයන් සමඟ බෙදාගන්න</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="book">
+        <h2 class="reveal" style="font-family: 'Cinzel'; font-size: 3.5rem; color: var(--gold);">Reservations</h2>
+        <p class="reveal" style="font-size: 1.1rem; color: #ccc; margin-top: 10px;">Reservations are essential for the ultimate home dining experience.</p>
+        <div class="contact-details reveal">
+            <p style="font-size: 1.2rem; margin-bottom: 20px; color: #fff;">Viale Jacopo dal Ponte, Vicenza</p>
+            <a href="https://wa.me/393891329138" class="btn" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 10px;">
+                <i class="fab fa-whatsapp" style="font-size: 1.5rem;"></i> WhatsApp +39 3891 329138
+            </a>
+        </div>
+
+        <div class="social-media reveal">
+            <a href="https://facebook.com/yourpagename" target="_blank" title="Follow us on Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://instagram.com/yourpagename" target="_blank" title="Follow us on Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+    </section>
+
+    <script>
+        // Hero Entrance Animation
+        gsap.to(".reveal-fade", { opacity: 1, y: 0, duration: 1.5, stagger: 0.3, ease: "power4.out" });
+
+        // Scroll Reveal Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.utils.toArray(".reveal").forEach((elem) => {
+            gsap.fromTo(elem, 
+                { opacity: 0, y: 70 }, 
+                { 
+                    scrollTrigger: {
+                        trigger: elem,
+                        start: "top 85%",
+                    },
+                    opacity: 1, 
+                    y: 0, 
+                    duration: 1.2,
+                    ease: "power3.out"
+                }
+            );
+        });
+
+        // ==========================================
+        // PRO 3D TILT EFFECT WITH GLARE
+        // ==========================================
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            const glare = card.querySelector('.glare-layer');
+            
+            card.addEventListener('mousemove', (e) => {
+                let rect = card.getBoundingClientRect();
+                let x = e.clientX - rect.left;
+                let y = e.clientY - rect.top;
+                let centerX = rect.width / 2;
+                let centerY = rect.height / 2;
+                
+                // Enhanced 3D Tilt calculation
+                let rotateX = ((centerY - y) / centerY) * 15; 
+                let rotateY = ((x - centerX) / centerX) * 15;
+                
+                card.style.transform = `perspective(1500px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+                
+                // Move the glare effect based on mouse position
+                if(glare) {
+                    let glareX = (x / rect.width) * 100;
+                    let glareY = (y / rect.height) * 100;
+                    glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.3) 0%, transparent 50%)`;
+                }
+            });
+
+            card.addEventListener('mouseleave', () => {
+                // Smoothly reset
+                card.style.transform = `perspective(1500px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                if(glare) {
+                    glare.style.background = `linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.2) 25%, transparent 30%)`;
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
